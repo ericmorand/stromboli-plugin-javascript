@@ -24,6 +24,16 @@ class Plugin extends StromboliPlugin {
           })
           .bundle(function (err, buffer) {
             if (err) {
+              // err.message format: 'Parsing file ' + file + ': ' + message
+              var regExp = new RegExp('^Parsing file (.*?): (.*)$');
+              var match = err.message.match(regExp);
+
+              if (match) {
+                var file = match[1];
+
+                renderResult.addDependency(file);
+              }
+
               reject(err);
             }
             else {
