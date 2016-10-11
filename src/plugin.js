@@ -17,36 +17,28 @@ class Plugin extends StromboliPlugin {
     var that = this;
 
     return new Promise(function (fulfill, reject) {
-      try {
-        Browserify(file, that.config)
-          .on('dep', function (dep) {
-            renderResult.addDependency(dep.file);
-          })
-          .bundle(function (err, buffer) {
-            if (err) {
-              // err.message format: 'Parsing file ' + file + ': ' + message
-              var regExp = new RegExp('^Parsing file (.*?): (.*)$');
-              var match = err.message.match(regExp);
+      Browserify(file, that.config)
+        .on('file', function (file, id, parent) {
+          renderResult.addDependency(file);
+        })
+        .bundle(function (err, buffer) {
+          if (err) {
+            // unfortunately, browserify doesn't return the file that triggered the error
+            // luckily, files with errors trigger the 'file' event, thus allowing us to maintain dependencies
+            var error = {
+              file: null,
+              message: err.message
+            };
 
-              if (match) {
-                var file = match[1];
+            reject(error);
+          }
+          else {
+            renderResult.addBinary('index.js', buffer);
 
-                renderResult.addDependency(file);
-              }
-
-              reject(err);
-            }
-            else {
-              renderResult.addBinary('index.js', buffer);
-
-              fulfill(renderResult);
-            }
-          })
-        ;
-      }
-      catch (err) {
-        reject(err);
-      }
+            fulfill(renderResult);
+          }
+        })
+      ;
     });
   }
 }
