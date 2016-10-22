@@ -1,13 +1,15 @@
-/**
- * Created by ericmorand on 06/09/16.
- */
-const StromboliPlugin = require('stromboli-plugin');
+'use strict';
+
 const path = require('path');
 
 const Promise = require('promise');
 const Browserify = require('browserify');
 
-class Plugin extends StromboliPlugin {
+class Plugin {
+  constructor(config) {
+    this.config = config;
+  }
+
   /**
    *
    * @param file {String}
