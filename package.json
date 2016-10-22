@@ -8,8 +8,6 @@
   },
   "author": "Eric MORAND",
   "dependencies": {
-    "stromboli": "^0.1.0",
-    "stromboli-plugin": "*",
     "browserify": "^13.1.0"
   },
   "repository": "ericmorand/stromboli-plugin-javascript",
