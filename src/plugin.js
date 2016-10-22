@@ -33,7 +33,7 @@ class Plugin extends StromboliPlugin {
             reject(error);
           }
           else {
-            renderResult.addBinary('index.js', buffer);
+            renderResult.addBinary('index.js', buffer.toString());
 
             fulfill(renderResult);
           }
