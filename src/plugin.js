@@ -14,9 +14,14 @@ class Plugin {
    *
    * @param file {String}
    * @param renderResult {StromboliRenderResult}
+   * @param output {String}
    */
-  render(file, renderResult) {
+  render(file, renderResult, output) {
     var that = this;
+
+    if (!output) {
+      output = 'index.js';
+    }
 
     return new Promise(function (fulfill, reject) {
       Browserify(file, that.config)
@@ -35,7 +40,7 @@ class Plugin {
             reject(error);
           }
           else {
-            renderResult.addBinary('index.js', buffer.toString());
+            renderResult.addBinary(output, buffer.toString());
 
             fulfill(renderResult);
           }
