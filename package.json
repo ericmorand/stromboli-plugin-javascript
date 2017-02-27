@@ -1,6 +1,6 @@
 {
   "name": "stromboli-plugin-javascript",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "",
   "main": "src/plugin.js",
   "scripts": {
@@ -8,8 +8,7 @@
     "test": "tap test/*.js --cov"
   },
   "author": "Eric MORAND",
-  "dependencies": {
-  },
+  "dependencies": {},
   "repository": "ericmorand/stromboli-plugin-javascript",
   "license": "Apache-2.0",
   "devDependencies": {
