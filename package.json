@@ -4,16 +4,20 @@
   "description": "",
   "main": "src/plugin.js",
   "scripts": {
+    "pretest": "npm prune && npm update",
     "test": "tap test/*.js --cov"
   },
   "author": "Eric MORAND",
   "dependencies": {
-    "browserify": "^13.1.0"
   },
   "repository": "ericmorand/stromboli-plugin-javascript",
   "license": "Apache-2.0",
   "devDependencies": {
     "stromboli": "^0.4.0",
-    "tap": "^7.1.2"
+    "tap": "^7.1.2",
+    "browserify": "^13.0.0"
+  },
+  "peerDependencies": {
+    "browserify": "^13.0.0"
   }
 }
