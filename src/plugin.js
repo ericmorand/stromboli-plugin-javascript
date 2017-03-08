@@ -13,34 +13,42 @@ class Plugin {
   /**
    *
    * @param file {String}
-   * @param renderResult {StromboliRenderResult}
    * @param output {String}
    */
-  render(file, renderResult, output) {
+  render(file, output) {
     var that = this;
 
     if (!output) {
       output = 'index.js';
     }
 
+    let renderResult = {
+      binaries: [],
+      dependencies: [],
+      error: null
+    };
+
     return new Promise(function (fulfill, reject) {
       Browserify(file, that.config)
         .on('file', function (file, id, parent) {
-          renderResult.addDependency(file);
+          renderResult.dependencies.push(file);
         })
         .bundle(function (err, buffer) {
           if (err) {
             // unfortunately, browserify doesn't return the file that triggered the error
             // luckily, files with errors trigger the 'file' event, thus allowing us to maintain dependencies
-            var error = {
+            renderResult.error = {
               file: null,
               message: err.message
             };
 
-            reject(error);
+            reject(renderResult);
           }
           else {
-            renderResult.addBinary(output, buffer.toString());
+            renderResult.binaries.push({
+              name: output,
+              data: buffer.toString()
+            });
 
             fulfill(renderResult);
           }

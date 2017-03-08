@@ -1,5 +1,4 @@
 const Plugin = require('../src/plugin');
-const RenderResult = require('../node_modules/stromboli/lib/render-result.js');
 const test = require('tap').test;
 const path = require('path');
 const fs = require('fs');
@@ -9,13 +8,11 @@ test('render', function (t) {
 
   t.plan(3);
 
-  var renderResult = new RenderResult();
-
-  return plugin.render(path.resolve('test/render/valid/index.js'), renderResult).then(
+  return plugin.render(path.resolve('test/render/valid/index.js')).then(
     function(renderResult) {
-      var binaries = renderResult.getBinaries();
+      var binaries = renderResult.binaries;
 
-      t.equal(renderResult.getDependencies().size, 3);
+      t.equal(renderResult.dependencies.length, 3);
       t.equal(binaries.length, 1);
       t.equal(binaries[0].name, 'index.js');
     },
@@ -28,16 +25,13 @@ test('render', function (t) {
 test('render with error', function (t) {
   var plugin = new Plugin();
 
-  t.plan(1);
-
-  var renderResult = new RenderResult();
-
-  return plugin.render(path.resolve('test/render/error/index.js'), renderResult).then(
+  return plugin.render(path.resolve('test/render/error/index.js')).then(
     function(renderResult) {
       t.fail();
     },
-    function(err) {
-      t.pass(err);
+    function(renderResult) {
+      t.ok(renderResult.error.message);
+      t.equal(renderResult.dependencies.length, 1);
     }
   );
 });
@@ -47,11 +41,9 @@ test('render with output', function (t) {
 
   t.plan(1);
 
-  var renderResult = new RenderResult();
-
-  return plugin.render(path.resolve('test/render/valid/index.js'), renderResult, 'custom.js').then(
+  return plugin.render(path.resolve('test/render/valid/index.js'), 'custom.js').then(
     function(renderResult) {
-      var binaries = renderResult.getBinaries();
+      var binaries = renderResult.binaries;
 
       t.equal(binaries[0].name, 'custom.js');
     },
