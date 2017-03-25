@@ -30,8 +30,31 @@ test('render with error', function (t) {
       t.fail();
     },
     function(renderResult) {
+      t.same(renderResult.dependencies, [
+        path.resolve('test/render/error/index.js')
+      ]);
+
+      t.equal(renderResult.error.file, path.resolve('test/render/error/index.js'));
       t.ok(renderResult.error.message);
-      t.equal(renderResult.dependencies.length, 1);
+    }
+  );
+});
+
+test('render with error in dependency', function (t) {
+  var plugin = new Plugin();
+
+  return plugin.render(path.resolve('test/render/error-in-dependency/index.js')).then(
+    function(renderResult) {
+      t.fail();
+    },
+    function(renderResult) {
+      t.same(renderResult.dependencies, [
+        path.resolve('test/render/error-in-dependency/index.js'),
+        path.resolve('test/render/error-in-dependency/foo.js')
+      ]);
+
+      t.equal(renderResult.error.file, path.resolve('test/render/error-in-dependency/foo.js'));
+      t.ok(renderResult.error.message);
     }
   );
 });
