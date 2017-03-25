@@ -28,17 +28,19 @@ class Plugin {
       error: null
     };
 
+    let currentFile = null;
+
     return new Promise(function (fulfill, reject) {
       Browserify(file, that.config)
         .on('file', function (file, id, parent) {
           renderResult.dependencies.push(file);
+
+          currentFile = file;
         })
         .bundle(function (err, buffer) {
           if (err) {
-            // unfortunately, browserify doesn't return the file that triggered the error
-            // luckily, files with errors trigger the 'file' event, thus allowing us to maintain dependencies
             renderResult.error = {
-              file: null,
+              file: currentFile,
               message: err.message
             };
 
