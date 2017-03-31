@@ -12,7 +12,7 @@ test('render', function (t) {
     function(renderResult) {
       var binaries = renderResult.binaries;
 
-      t.equal(renderResult.dependencies.length, 3);
+      t.equal(renderResult.sourceDependencies.length, 3);
       t.equal(binaries.length, 1);
       t.equal(binaries[0].name, 'index.js');
     },
@@ -30,9 +30,9 @@ test('render with error', function (t) {
       t.fail();
     },
     function(renderResult) {
-      t.same(renderResult.dependencies, [
+      t.same(renderResult.sourceDependencies.sort(), [
         path.resolve('test/render/error/index.js')
-      ]);
+      ].sort());
 
       t.equal(renderResult.error.file, path.resolve('test/render/error/index.js'));
       t.ok(renderResult.error.message);
@@ -48,10 +48,10 @@ test('render with error in dependency', function (t) {
       t.fail();
     },
     function(renderResult) {
-      t.same(renderResult.dependencies, [
+      t.same(renderResult.sourceDependencies.sort(), [
         path.resolve('test/render/error-in-dependency/index.js'),
         path.resolve('test/render/error-in-dependency/foo.js')
-      ]);
+      ].sort());
 
       t.equal(renderResult.error.file, path.resolve('test/render/error-in-dependency/foo.js'));
       t.ok(renderResult.error.message);
