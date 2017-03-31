@@ -24,7 +24,8 @@ class Plugin {
 
     let renderResult = {
       binaries: [],
-      dependencies: [],
+      binaryDependencies: [],
+      sourceDependencies: [],
       error: null
     };
 
@@ -33,7 +34,7 @@ class Plugin {
     return new Promise(function (fulfill, reject) {
       Browserify(file, that.config)
         .on('file', function (file, id, parent) {
-          renderResult.dependencies.push(file);
+          renderResult.sourceDependencies.push(file);
 
           currentFile = file;
         })
